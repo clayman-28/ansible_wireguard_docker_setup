@@ -1,0 +1,10 @@
+---
+- name: Get Docker logs and display a message
+  shell: |
+    docker logs wireguard
+    echo "Below are the QR codes for the clients, remember the QR code count is for the clients you specified before."
+  register: result
+
+- name: Display Docker logs and message
+  debug:
+    var: result.stdout_lines

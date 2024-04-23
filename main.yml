@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: yes
+
+  vars_files:
+    - vars/vars.yml
+
+  tasks:
+    - include_tasks: tasks/install_requirements.yml
+    - include_tasks: tasks/deploy_wireguard_container.yml
+    - include_tasks: tasks/show_install_log.yml

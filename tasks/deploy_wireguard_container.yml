@@ -1,0 +1,19 @@
+---
+- name: Ensure /opt/wireguard directory exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /opt/wireguard
+    - /opt/wireguard/config
+
+- name: Generate Docker Compose file from template
+  template:
+    src: templates/docker-compose.j2
+    dest: /opt/wireguard/docker-compose.yml
+
+- name: Run Docker Compose to deploy Wireguard
+  shell: "docker-compose up -d"
+  args:
+    chdir: /opt/wireguard

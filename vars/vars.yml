@@ -1,0 +1,29 @@
+# container name
+CONTAINER_NAME: wireguard
+
+# timezone (must set, without this the connaction won't achieve handshake)
+TZ: Europe/Budapest
+
+# server CNAME or IP
+SERVER_URL: myserver.com
+
+# server port (don't change if you don't have conflict). remember to open this port on your firewall!
+SERVER_PORT: 51820
+
+# specify peer (client) count
+PEER_NUMBER: 3
+
+# dns server (don't change if you would like to use default)
+DNS_SERVER: auto
+
+# internal subnet (change only if there are some LAN overlap)
+INTERNAL_SUBNET: 10.13.13.0
+
+# allowed IPs (change only if you don't want full tunnel)
+ALLOWED_IPS: 0.0.0.0/0
+
+# config file host location (this should be backed up)
+CONFIG_FILE_PATH: /opt/wireguard/config
+
+# logging
+LOG_CONFS: true

@@ -1,0 +1,84 @@
+---
+- name: Install make on Debian/Ubuntu systems
+  apt:
+    name: make
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install make on RedHat/CentOS systems
+  yum:
+    name: make
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure dependencies are installed (Debian)
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Add Docker GPG key (Debian)
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Add Docker APT repository (Debian)
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Docker (Debian)
+  apt:
+    name: docker-ce
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Docker (RedHat/EC2)
+  yum:
+    name: docker
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install Docker Compose on Debian/Ubuntu systems
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64"
+    dest: "/usr/local/bin/docker-compose"
+    mode: '0755'
+  when: ansible_os_family == "Debian"
+  vars:
+    compose_version: "1.29.2"
+
+- name: Ensure libcrypt is installed (RedHat/EC2)
+  yum:
+    name: libxcrypt-compat
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Download Docker Compose (RedHat/EC2)
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
+    dest: "/usr/local/bin/docker-compose"
+    mode: '0755'
+  become_method: sudo
+  when: ansible_os_family == "RedHat"
+
+- name: Check docker-compose version
+  command: "/usr/local/bin/docker-compose --version"
+  register: version_output
+
+- name: Display docker-compose version
+  debug:
+    var: version_output.stdout_lines
+ 
+- name: Ensure Docker service is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
