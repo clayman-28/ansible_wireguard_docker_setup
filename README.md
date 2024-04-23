@@ -10,6 +10,8 @@ Requirements: \
     - Make \
     - Required Docker and Docker Compose will be installed automatically if not present.
 
+# Installation
+
 Set parameters accordingly at: ./vars/vars.yml
 
 After variables are set run in the installer's root directory: \
